@@ -1,35 +1,42 @@
-import pluginJs from "@eslint/js";
-import pluginReact from "eslint-plugin-react";
+import js from '@eslint/js';
+import reactPlugin from 'eslint-plugin-react';
 
 export default [
-  { files: ["**/*.{js,mjs,cjs,jsx}"] },
-  { 
-    languageOptions: { 
+  js.configs.recommended,
+  {
+    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
+    plugins: {
+      react: reactPlugin,
+    },
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
       parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true }
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
       globals: {
-        document: true,
-        window: true,
-        test: true,
-        expect: true
-      }
+        document: 'readonly',
+        window: 'readonly',
+        process: 'readonly',
+        console: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
     rules: {
-
-     'no-unused-vars': ['error', { varsIgnorePattern: 'React|App' }]
-
-    }
+      'react/jsx-uses-react': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'no-unused-vars': ['error', { 
+        varsIgnorePattern: '^React$',
+        argsIgnorePattern: '^_',
+      }],
+    },
   },
-  pluginJs.configs.recommended,
-  {
-    plugins: { react: pluginReact },
-    rules: {
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-uses-react": "off",
-      "react/jsx-uses-vars": "error"
-    }
-  }
-]
+];
